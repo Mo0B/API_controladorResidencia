@@ -9,7 +9,7 @@ class CorrespondenciaR {
         return api.getCorrespondenciaS()
     }
 
-    suspend fun getCorrespondecia(id: Long): CorrespondenciaM {
+    suspend fun getCorrespondencia(id: Long): CorrespondenciaM {
         return api.getCorrespondecia(id)
     }
 
