@@ -1,4 +1,4 @@
-package com.example.api_controladorresidencia.Modelos
+package com.example.api_controladorresidencia.data.model
 
 data class InquilinoM(
     val id: Long = 0,
