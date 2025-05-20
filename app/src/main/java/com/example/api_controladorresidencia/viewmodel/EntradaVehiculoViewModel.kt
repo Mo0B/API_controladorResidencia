@@ -106,5 +106,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
             }
         }
     }
-
+    fun setError(msg: String) {
+        _error.value = msg
+    }
 }

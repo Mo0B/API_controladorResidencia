@@ -60,7 +60,7 @@ class `InquilinoViewModel` : ViewModel() {
     }
 
 
-    fun updateInquilino(id: Long, nuevoInquilino: InquilinoM, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun updateInquilino(id: Long, nuevoInquilino: InquilinoM, viewModel: InquilinoViewModel, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -107,5 +107,7 @@ class `InquilinoViewModel` : ViewModel() {
             }
         }
     }
-
+    fun setError(msg: String) {
+        _error.value = msg
+    }
 }

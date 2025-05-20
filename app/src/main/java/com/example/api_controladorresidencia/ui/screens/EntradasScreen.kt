@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.api_controladorresidencia.viewmodel.EntradaViewModel
 
 @Composable
 fun EntradasScreen(
     navController: NavController,
-    viewModel: `EntradaViewModel.kt` = viewModel()
+    viewModel: EntradaViewModel = viewModel()
 ) {
 
     Column(modifier = Modifier.statusBarsPadding())  //Evitemos que se nos ponga debajo de la barra de notificaciones por favor

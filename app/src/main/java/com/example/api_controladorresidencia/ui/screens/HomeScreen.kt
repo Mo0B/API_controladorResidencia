@@ -20,5 +20,13 @@ fun HomeScreen(navController: NavController) {
         Button(onClick = { navController.navigate("registro") }, modifier = Modifier.fillMaxWidth()) {
             Text(text = "Registrar Entrada")
         }
+        Button(onClick = { navController.navigate("list_inquilinos") }, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Ver Inquilinos")
+
+        }
+
+        Button(onClick = { navController.navigate("crear_inquilino") }, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Crear Inquilinos")
+        }
     }
 }

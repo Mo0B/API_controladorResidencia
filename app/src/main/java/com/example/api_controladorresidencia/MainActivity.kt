@@ -12,7 +12,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             API_controladorResidenciaTheme {
-
                 NavGraph(navController = rememberNavController())
             }
         }
