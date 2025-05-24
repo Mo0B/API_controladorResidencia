@@ -20,9 +20,9 @@ class LoginViewModel(
     private val _loginError = MutableLiveData<String?>()
     val loginError: LiveData<String?> = _loginError
 
-    fun login(usuario: String, contrasena: String) {
+    fun login(usuario: String, contra: String) {
         viewModelScope.launch {
-            val result = repository.login(usuario, contrasena)
+            val result = repository.login(usuario, contra)
             result.onSuccess { token ->
                 controlSesion.saveToken(token)
                 _loginSuccess.value = true

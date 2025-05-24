@@ -16,29 +16,20 @@ import com.example.api_controladorresidencia.data.repository.LoginR
 import com.example.api_controladorresidencia.viewmodel.LoginViewModelFactory
 
 private val api = RetrofitClient.instancia
+
+
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     onLoginSuccess: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    val viewModel: LoginViewModel = viewModel(
-        factory = LoginViewModelFactory(
-            repository = LoginR(api),
-            controlSesion = ControlSesion(context)
-        )
-    )
-
-    val loginSuccess = viewModel.loginSuccess.observeAsState()
-    val loginError = viewModel.loginError.observeAsState()
-
+    val loginSuccess by viewModel.loginSuccess.observeAsState()
+    val loginError by viewModel.loginError.observeAsState()
     val usuarioState = remember { mutableStateOf("") }
     val contrasenaState = remember { mutableStateOf("") }
 
-
-    LaunchedEffect(loginSuccess.value) {
-        if (loginSuccess.value == true) {
+    LaunchedEffect(loginSuccess) {
+        if (loginSuccess == true) {
             onLoginSuccess()
         }
     }
@@ -54,25 +45,20 @@ fun LoginScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Iniciar sesión",
-                style = MaterialTheme.typography.headlineMedium
-            )
+            Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
 
             OutlinedTextField(
                 value = usuarioState.value,
                 onValueChange = { usuarioState.value = it },
-                label = { Text("Usuario", style = MaterialTheme.typography.labelLarge) },
-                singleLine = true,
+                label = { Text("Usuario") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = contrasenaState.value,
                 onValueChange = { contrasenaState.value = it },
-                label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
+                label = { Text("Contraseña") },
                 visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -85,17 +71,17 @@ fun LoginScreen(
                 Text("Ingresar")
             }
 
-            loginError.value?.let {
+            loginError?.let {
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
     }
 }
+
 
 
 
