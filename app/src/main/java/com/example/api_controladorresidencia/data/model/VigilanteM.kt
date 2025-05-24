@@ -1,5 +1,8 @@
 package com.example.api_controladorresidencia.data.model
 
+import androidx.room.Entity
+
+@Entity(tableName = "Vigilantes")
 data class VigilanteM(
     val id: Long = 0,
     val nombre: String = "",

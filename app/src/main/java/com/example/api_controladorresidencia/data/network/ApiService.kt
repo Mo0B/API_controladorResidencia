@@ -9,9 +9,7 @@ import com.example.api_controladorresidencia.data.model.ObraM
 import com.example.api_controladorresidencia.data.model.VehiculoM
 import com.example.api_controladorresidencia.data.model.VigilanteM
 import com.example.api_controladorresidencia.data.model.VisitanteM
-import com.example.api_controladorresidencia.data.repository.CorrespondenciaR
-import com.example.api_controladorresidencia.data.repository.MantenimientoR
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -116,10 +114,24 @@ interface ApiService {
     suspend fun updateVigilante(@Path("id") id: Long, @Body vigilante: VigilanteM): VigilanteM
     @PUT("/api/visitante/update/{id}")
     suspend fun updateVisitante(@Path("id") id: Long, @Body visitante: VisitanteM): VisitanteM
+
+    @POST("/api/login")
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
+
 }
+data class LoginRequest(
+    val usuario: String,
+    val contra: String
+)
+data class LoginResponse(
+    val token: String
+)
+
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.2.2:8081"
+    //private const val BASE_URL = "http://10.0.2.2:8081"
+    private const val BASE_URL = "https://dbplatica.onrender.com"
 
     val instancia: ApiService by lazy {
         Retrofit.Builder()

@@ -2,9 +2,7 @@ package com.example.api_controladorresidencia.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.api_controladorresidencia.data.model.EntradaM
 import com.example.api_controladorresidencia.data.model.VisitanteM
-import com.example.api_controladorresidencia.data.repository.EntradaR
 import com.example.api_controladorresidencia.data.repository.VisitanteR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

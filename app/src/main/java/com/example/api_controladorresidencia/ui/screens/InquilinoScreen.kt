@@ -15,11 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-
 import com.example.api_controladorresidencia.data.model.InquilinoM
 import com.example.api_controladorresidencia.viewmodel.InquilinoViewModel
-import kotlinx.coroutines.launch
+
 
 
 @Composable
@@ -31,7 +29,9 @@ fun ObtenerInquilinosScreen(
     val inquilinos by viewModel.inquilino.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
-
+    LaunchedEffect(Unit) {
+        viewModel.getInquilinoS()
+    }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onCrearInquilinoClick) {

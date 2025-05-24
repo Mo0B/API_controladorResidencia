@@ -1,11 +1,9 @@
 package com.example.api_controladorresidencia.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
@@ -31,7 +29,7 @@ fun EntradasFormScreen(navController: NavController) {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Campo para ID del vigilante
+
             OutlinedTextField(
                 value = idVigilante,
                 onValueChange = { idVigilante = it },
@@ -39,7 +37,6 @@ fun EntradasFormScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Menú desplegable para categoría
             ExposedDropdownMenuBox(
                 expanded = isDropdownExpanded,
                 onExpandedChange = { isDropdownExpanded = !isDropdownExpanded }
@@ -72,7 +69,7 @@ fun EntradasFormScreen(navController: NavController) {
                 }
             }
 
-            // Campo para ID de la referencia según la categoría
+
             OutlinedTextField(
                 value = referencia,
                 onValueChange = { referencia = it },
@@ -82,10 +79,10 @@ fun EntradasFormScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Botón para enviar (por ahora aún no conectado al backend)
+
             Button(
                 onClick = {
-                    // En una próxima fase conectaremos esta lógica con la API.
+
                     println("Registrando entrada con: Categoria=$categoria, Referencia=$referencia, Vigilante=$idVigilante")
                     navController.popBackStack()
                 },
