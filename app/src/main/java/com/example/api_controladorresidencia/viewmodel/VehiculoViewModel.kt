@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `VehiculoViewModel` : ViewModel() {
+class `VehiculoViewModel` (private val vehiculoR: VehiculoR): ViewModel() {
 
-    private val repository = VehiculoR()
+
 
     private val _vehiculo = MutableStateFlow<List<VehiculoM>>(emptyList())
     val vehiculo: StateFlow<List<VehiculoM>> = _vehiculo
@@ -32,7 +32,7 @@ class `VehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getVehiculoS()
+                val lista = vehiculoR.getVehiculoS()
                 _vehiculo.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -47,7 +47,7 @@ class `VehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _vehiculoSeleccionado.value = repository.getVehiculo(id)
+                _vehiculoSeleccionado.value = vehiculoR.getVehiculo(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando vehículo: ${e.message}"
@@ -60,7 +60,7 @@ class `VehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateVehiculo(id, nuevoVehiculo)
+                vehiculoR.updateVehiculo(id, nuevoVehiculo)
                 getVehiculoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -76,7 +76,7 @@ class `VehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteVehiculo(id)
+                vehiculoR.deleteVehiculo(id)
                 getVehiculoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -92,7 +92,7 @@ class `VehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveVehiculo(vehiculo)
+                vehiculoR.saveVehiculo(vehiculo)
                 getVehiculoS()
                 onSuccess()
             } catch (e: Exception) {

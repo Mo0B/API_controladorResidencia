@@ -3,13 +3,17 @@ package com.example.api_controladorresidencia.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.api_controladorresidencia.data.model.MantenimientoM
+import com.example.api_controladorresidencia.data.repository.EntradaVehiculoR
 import com.example.api_controladorresidencia.data.repository.MantenimientoR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `MantenimientoViewModel` : ViewModel() {
-    private val repository = MantenimientoR()
+class `MantenimientoViewModel`(
+    private val mantenimientoR: MantenimientoR
+
+) : ViewModel() {
+
 
     private val _mantenimiento = MutableStateFlow<List<MantenimientoM>>(emptyList())
     val mantenimiento: StateFlow<List<MantenimientoM>> = _mantenimiento
@@ -31,7 +35,7 @@ class `MantenimientoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getMantenimientoS()
+                val lista = mantenimientoR.getMantenimientoS()
                 _mantenimiento.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -46,7 +50,7 @@ class `MantenimientoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _mantenimientoSeleccionado.value = repository.getMantenimiento(id)
+                _mantenimientoSeleccionado.value = mantenimientoR.getMantenimiento(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando mantenimiento: ${e.message}"
@@ -59,7 +63,7 @@ class `MantenimientoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateMantenimiento(id, nuevoMantenimiento)
+                mantenimientoR.updateMantenimiento(id, nuevoMantenimiento)
                 getMantenimientoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -75,7 +79,7 @@ class `MantenimientoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteMantenimiento(id)
+                mantenimientoR.deleteMantenimiento(id)
                 getMantenimientoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -91,7 +95,7 @@ class `MantenimientoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveMantenimiento(mantenimiento)
+                mantenimientoR.saveMantenimiento(mantenimiento)
                 getMantenimientoS()
                 onSuccess()
             } catch (e: Exception) {

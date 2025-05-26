@@ -2,15 +2,18 @@ package com.example.api_controladorresidencia.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.api_controladorresidencia.data.ControlSesion
 import com.example.api_controladorresidencia.data.model.InquilinoM
+import com.example.api_controladorresidencia.data.repository.EntradaR
 import com.example.api_controladorresidencia.data.repository.InquilinoR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `InquilinoViewModel` : ViewModel() {
+class InquilinoViewModel(
+    private val inquilinoR: InquilinoR
 
-    private val repository = InquilinoR()
+): ViewModel() {
 
     private val _inquilino = MutableStateFlow<List<InquilinoM>>(emptyList())
     val inquilino: StateFlow<List<InquilinoM>> = _inquilino
@@ -32,7 +35,7 @@ class `InquilinoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getInquilinoS()
+                val lista = inquilinoR.getInquilinoS()
                 _inquilino.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -47,7 +50,7 @@ class `InquilinoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _inquilinoSeleccionado.value = repository.getInquilino(id)
+                _inquilinoSeleccionado.value = inquilinoR.getInquilino(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando inquilino: ${e.message}"
@@ -62,7 +65,7 @@ class `InquilinoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateInquilino(id, nuevoInquilino)
+                inquilinoR.updateInquilino(id, nuevoInquilino)
                 getInquilinoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -78,7 +81,7 @@ class `InquilinoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteInquilino(id)
+                inquilinoR.deleteInquilino(id)
                 getInquilinoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -94,7 +97,7 @@ class `InquilinoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveInquilino(inquilino)
+                inquilinoR.saveInquilino(inquilino)
                 getInquilinoS()
                 onSuccess()
             } catch (e: Exception) {

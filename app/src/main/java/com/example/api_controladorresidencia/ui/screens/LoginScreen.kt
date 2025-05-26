@@ -15,7 +15,7 @@ import com.example.api_controladorresidencia.data.network.RetrofitClient
 import com.example.api_controladorresidencia.data.repository.LoginR
 import com.example.api_controladorresidencia.viewmodel.LoginViewModelFactory
 
-private val api = RetrofitClient.instancia
+
 
 
 @Composable

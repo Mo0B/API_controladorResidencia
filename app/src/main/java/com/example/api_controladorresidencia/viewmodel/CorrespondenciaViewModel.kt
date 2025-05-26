@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.api_controladorresidencia.data.model.CorrespondenciaM
 import com.example.api_controladorresidencia.data.repository.CorrespondenciaR
+import com.example.api_controladorresidencia.data.repository.InquilinoR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `CorrespondenciaViewModel` : ViewModel() {
-    private val repository = CorrespondenciaR()
+class `CorrespondenciaViewModel`(
+    private val correspondenciaR: CorrespondenciaR
+
+) : ViewModel() {
+
 
     private val _correspondencia = MutableStateFlow<List<CorrespondenciaM>>(emptyList())
     val correspondencia: StateFlow<List<CorrespondenciaM>> = _correspondencia
@@ -30,7 +34,7 @@ class `CorrespondenciaViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getCorrespondenciaS()
+                val lista = correspondenciaR.getCorrespondenciaS()
                 _correspondencia.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -45,7 +49,7 @@ class `CorrespondenciaViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _correspondenciaSeleccionada.value = repository.getCorrespondencia(id)
+                _correspondenciaSeleccionada.value = correspondenciaR.getCorrespondencia(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando correspondencia: ${e.message}"
@@ -60,7 +64,7 @@ class `CorrespondenciaViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateCorrespondencia(id, nuevaCorrespondencia)
+                correspondenciaR.updateCorrespondencia(id, nuevaCorrespondencia)
                 getCorrespondenciaS()
                 onSuccess()
             } catch (e: Exception) {
@@ -76,7 +80,7 @@ class `CorrespondenciaViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteCorrespondencia(id)
+                correspondenciaR.deleteCorrespondencia(id)
                 getCorrespondenciaS()
                 onSuccess()
             } catch (e: Exception) {
@@ -92,7 +96,7 @@ class `CorrespondenciaViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveCorrespondencia(correspondencia)
+                correspondenciaR.saveCorrespondencia(correspondencia)
                 getCorrespondenciaS()
                 onSuccess()
             } catch (e: Exception) {

@@ -1,9 +1,10 @@
 package com.example.api_controladorresidencia.data.repository
 import com.example.api_controladorresidencia.data.model.EntradaM
 import com.example.api_controladorresidencia.data.model.VehiculoM
+import com.example.api_controladorresidencia.data.network.ApiService
 import com.example.api_controladorresidencia.data.network.RetrofitClient
-class VehiculoR {
-    private val api = RetrofitClient.instancia
+class VehiculoR(private val api: ApiService) {
+
 
     suspend fun getVehiculoS(): List<VehiculoM> {
         return api.getVehiculoS()

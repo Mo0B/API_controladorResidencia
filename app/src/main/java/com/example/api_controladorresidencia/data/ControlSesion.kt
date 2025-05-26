@@ -17,4 +17,11 @@ class ControlSesion(context: Context) {
         prefs.edit().remove("auth_token").apply()
     }
 
+    fun saveVigilanteId(id: Long) {
+        prefs.edit().putLong("vigilante_id", id).apply()
+    }
+
+    fun getVigilanteId(): Long {
+        return prefs.getLong("vigilante_id", -1L)
+    }
 }

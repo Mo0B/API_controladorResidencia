@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `VisitanteViewModel` : ViewModel() {
+class `VisitanteViewModel` (private val visitanteR: VisitanteR): ViewModel() {
 
-    private val repository = VisitanteR()
+
 
     private val _visitante = MutableStateFlow<List<VisitanteM>>(emptyList())
     val visitante: StateFlow<List<VisitanteM>> = _visitante
@@ -32,7 +32,7 @@ class `VisitanteViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getVisitanteS()
+                val lista = visitanteR.getVisitanteS()
                 _visitante.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -47,7 +47,7 @@ class `VisitanteViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _visitanteSeleccionado.value = repository.getVisitante(id)
+                _visitanteSeleccionado.value = visitanteR.getVisitante(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando visitante: ${e.message}"
@@ -60,7 +60,7 @@ class `VisitanteViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateVisitante(id, nuevoVisitante)
+                visitanteR.updateVisitante(id, nuevoVisitante)
                 getVisitanteS()
                 onSuccess()
             } catch (e: Exception) {
@@ -76,7 +76,7 @@ class `VisitanteViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteVisitante(id)
+                visitanteR.deleteVisitante(id)
                 getVisitanteS()
                 onSuccess()
             } catch (e: Exception) {
@@ -92,7 +92,7 @@ class `VisitanteViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveVisitante(visitante)
+                visitanteR.saveVisitante(visitante)
                 getVisitanteS()
                 onSuccess()
             } catch (e: Exception) {

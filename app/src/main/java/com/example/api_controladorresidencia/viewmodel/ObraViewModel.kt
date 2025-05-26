@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `ObraViewModel` : ViewModel() {
+class `ObraViewModel`(private val obraR: ObraR) : ViewModel() {
 
-    private val repository = ObraR()
+
 
     private val _obra = MutableStateFlow<List<ObraM>>(emptyList())
     val obra: StateFlow<List<ObraM>> = _obra
@@ -32,7 +32,7 @@ class `ObraViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getObraS()
+                val lista = obraR.getObraS()
                 _obra.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -47,7 +47,7 @@ class `ObraViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _obraSeleccionada.value = repository.getObra(id)
+                _obraSeleccionada.value = obraR.getObra(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando obra: ${e.message}"
@@ -60,7 +60,7 @@ class `ObraViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateObra(id, nuevaObra)
+                obraR.updateObra(id, nuevaObra)
                 getObraS()
                 onSuccess()
             } catch (e: Exception) {
@@ -76,7 +76,7 @@ class `ObraViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteObra(id)
+                obraR.deleteObra(id)
                 getObraS()
                 onSuccess()
             } catch (e: Exception) {
@@ -92,7 +92,7 @@ class `ObraViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveObra(obra)
+                obraR.saveObra(obra)
                 getObraS()
                 onSuccess()
             } catch (e: Exception) {

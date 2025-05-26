@@ -1,5 +1,9 @@
 package com.example.api_controladorresidencia.data.network
 
+import android.util.Log
+import com.example.api_controladorresidencia.data.ControlSesion
+import com.example.api_controladorresidencia.data.Request.EntradaRequest
+import com.example.api_controladorresidencia.data.Request.VisitanteRequest
 import com.example.api_controladorresidencia.data.model.CorrespondenciaM
 import com.example.api_controladorresidencia.data.model.EntradaM
 import com.example.api_controladorresidencia.data.model.EntradaVehiculoM
@@ -9,12 +13,14 @@ import com.example.api_controladorresidencia.data.model.ObraM
 import com.example.api_controladorresidencia.data.model.VehiculoM
 import com.example.api_controladorresidencia.data.model.VigilanteM
 import com.example.api_controladorresidencia.data.model.VisitanteM
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -61,11 +67,13 @@ interface ApiService {
     @POST("/api/correspondencia/create")
     suspend fun saveCorrespondencia(@Body correspondencia: CorrespondenciaM): CorrespondenciaM
     @POST("/api/entrada/create")
-    suspend fun saveEntrada(@Body entrada: EntradaM): EntradaM
+    suspend fun saveEntrada(@Body entrada: EntradaRequest): Response<Unit>
     @POST("/api/entrada-vehiculo/create")
     suspend fun saveEntradaVehiculo(@Body entradaVehiculo: EntradaVehiculoM): EntradaVehiculoM
-    @POST("/api/inquilino/create")
-    suspend fun saveInquilino(@Body inquilino: InquilinoM): InquilinoM
+
+
+
+
     @POST("/api/mantenimiento/create")
     suspend fun saveMantenimiento(@Body mantenimiento: MantenimientoM): MantenimientoM
     @POST("/api/obra/create")
@@ -118,6 +126,21 @@ interface ApiService {
     @POST("/api/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
+    @GET("api/vigilante/me")
+    suspend fun getLoggedVigilante(
+        @Header("Authorization") token: String
+    ): Response<VigilanteM> //
+
+
+    @POST("/api/entrada/registrar")
+    suspend fun registrarEntrada(@Body entrada: EntradaRequest): Response<EntradaM>
+
+    @POST("/api/visitante/registrar")
+    suspend fun registrarVisita(@Body entrada: VisitanteRequest): Response<VisitanteM>
+
+    @POST("/api/inquilino/create")
+    suspend fun saveInquilino(@Body inquilino: InquilinoM): Response<InquilinoM>
+
 
 }
 data class LoginRequest(
@@ -133,9 +156,24 @@ object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2:8080"
     //private const val BASE_URL = "https://dbplatica.onrender.com"
 
-    val instancia: ApiService by lazy {
-        Retrofit.Builder()
+
+    fun create(controlSesion: ControlSesion): ApiService {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val requestBuilder = chain.request().newBuilder()
+                val token = controlSesion.getToken() // Se lee en cada petición
+                Log.d("TOKEN_INTERCEPTOR", "Usando token: $token")
+                if (!token.isNullOrBlank()) {
+                    requestBuilder.addHeader("Authorization", "Bearer $token")
+
+                }
+                chain.proceed(requestBuilder.build())
+            }
+            .build()
+
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)

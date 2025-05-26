@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `VigilanteViewModel` : ViewModel() {
+class `VigilanteViewModel` (
+    private val repository: VigilanteR
+) : ViewModel() {
 
-    private val repository = VigilanteR()
+
 
     private val _vigilante = MutableStateFlow<List<VigilanteM>>(emptyList())
     val vigilante: StateFlow<List<VigilanteM>> = _vigilante

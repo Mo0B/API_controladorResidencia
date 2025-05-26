@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.api_controladorresidencia.data.model.EntradaVehiculoM
 import com.example.api_controladorresidencia.data.repository.EntradaVehiculoR
+import com.example.api_controladorresidencia.data.repository.InquilinoR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class `EntradaVehiculoViewModel` : ViewModel() {
-    private val repository = EntradaVehiculoR()
+class `EntradaVehiculoViewModel`(
+    private val entradaVehiculoR: EntradaVehiculoR
+
+) : ViewModel() {
+
 
     private val _entradaVehiculo = MutableStateFlow<List<EntradaVehiculoM>>(emptyList())
     val entradaVehiculo: StateFlow<List<EntradaVehiculoM>> = _entradaVehiculo
@@ -32,7 +36,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val lista = repository.getEntradaVehiculoS()
+                val lista = entradaVehiculoR.getEntradaVehiculoS()
                 _entradaVehiculo.value = lista
                 _error.value = null
             } catch (e: Exception) {
@@ -47,7 +51,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _entradaVehiculoSeleccionada.value = repository.getEntradaVehiculo(id)
+                _entradaVehiculoSeleccionada.value = entradaVehiculoR.getEntradaVehiculo(id)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error cargando entrada de vehículo: ${e.message}"
@@ -61,7 +65,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.updateEntradaVehiculo(id, nuevaEntradaVehiculo)
+                entradaVehiculoR.updateEntradaVehiculo(id, nuevaEntradaVehiculo)
                 getEntradaVehiculoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -77,7 +81,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.deleteEntradaVehiculo(id)
+                entradaVehiculoR.deleteEntradaVehiculo(id)
                 getEntradaVehiculoS()
                 onSuccess()
             } catch (e: Exception) {
@@ -93,7 +97,7 @@ class `EntradaVehiculoViewModel` : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                repository.saveEntradaVehiculo(entradaVehiculo)
+                entradaVehiculoR.saveEntradaVehiculo(entradaVehiculo)
                 getEntradaVehiculoS()
                 onSuccess()
             } catch (e: Exception) {
